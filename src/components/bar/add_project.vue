@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <div class="left" alt="back">
+      <div class="left" @click="$router.back(-1)">
         <span></span>
         <span></span>
         <span></span>
@@ -9,7 +9,7 @@
 
       <div class="mid"></div>
       <div class="right">
-        <div class="bar-btn bar-btn-2">
+        <div class="bar-btn bar-btn-2" @click="confirm">
           <div class="btn-icon"></div>
           <span>确认</span>
         </div>
@@ -19,7 +19,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    confirm() {
+      this.$parent.emit_create_project();
+    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -104,7 +110,8 @@ export default {};
       flex-direction: row;
       align-items: center;
       justify-content: center;
-
+      font-size: 1rem;
+      
       .btn-icon {
         width: 30px;
         height: 30px;
@@ -124,7 +131,6 @@ export default {};
       color: #fff;
       border: 2px solid #52be80;
       background-color: #52be80;
-      font-size: 0.7rem;
 
       .btn-icon {
         background-size: 50%;

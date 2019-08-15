@@ -1,18 +1,32 @@
 <template>
   <div class="bar-btns">
-    <div class="bar-btn bar-btn-2">
-      <div class="btn-icon"></div>
-      <span>编辑</span>
+    <div class="left">
+      <div class="refresh" @click="refreshProjects()">
+        <div class="icon"></div>
+        <span>刷新</span>
+      </div>
     </div>
-    <router-link to="/project/add" tag="div" class="bar-btn bar-btn-1">
+    <div class="right">
+      <div class="bar-btn bar-btn-2">
+        <div class="btn-icon"></div>
+        <span>编辑</span>
+      </div>
+      <router-link to="/project/add" tag="div" class="bar-btn bar-btn-1">
         <div class="btn-icon"></div>
         <span>添加项目</span>
-    </router-link>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    refreshProjects() {
+      this.$parent.refreshProjects();
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -23,92 +37,151 @@ export default {};
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
 
-  .bar-btn {
-    flex-grow: 0;
-    flex-shrink: 0;
-    width: 100px;
-    height: 40px;
-    border-radius: 5px;
-    // background-color: #14165f;
-    cursor: pointer;
-    margin-left: 15px;
-    // border: 1px solid #14165f;
-    transition: all 0.4s ease-in-out;
+  .left {
+    .refresh {
+      display: flex;
+      flex-direction: row;
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease-in-out;
+      // background-color: #52BE80;
+      cursor: pointer;
+
+      .icon {
+        margin-top: 4px;
+        margin-left: 4px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        // background-color: #52BE80;
+        background-image: url(../../images/icon/refresh_grey.png);
+        background-size: 70%;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: all 0.6s ease-in-out;
+      }
+      span {
+        display: block;
+        width: 0;
+        line-height: 40px;
+        height: 40px;
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+      }
+    }
+    .refresh:hover {
+      background-color: #52be80;
+      width: 100px;
+      box-shadow: 0px 2px 13px rgba(82, 190, 129, 0.475);
+
+      .icon {
+        background-image: url(../../images/icon/refresh_green.png);
+        background-color: #fff;
+        transform: rotate(180deg);
+      }
+      span {
+        width: 50px;
+        padding: 0 10px;
+      }
+    }
+  }
+
+  .right {
     display: flex;
     flex-direction: row;
+    flex-grow: 1;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 
-    .btn-icon {
-      width: 30px;
-      height: 30px;
-      flex-shrink: 0;
+    .bar-btn {
       flex-grow: 0;
-      background-position: center;
-      background-repeat: no-repeat;
-      transition: all 0.2s ease-in-out;
-    }
-    span {
       flex-shrink: 0;
-      flex-grow: 0;
+      width: 100px;
+      height: 40px;
+      border-radius: 5px;
+      // background-color: #14165f;
+      cursor: pointer;
+      margin-left: 15px;
+      // border: 1px solid #14165f;
+      transition: all 0.4s ease-in-out;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+
+      .btn-icon {
+        width: 30px;
+        height: 30px;
+        flex-shrink: 0;
+        flex-grow: 0;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: all 0.2s ease-in-out;
+      }
+      span {
+        flex-shrink: 0;
+        flex-grow: 0;
+      }
     }
-  }
-  .bar-btn:hover {
-    // background-color: #181957;
-    // border: 1px solid #181957;
-    // box-shadow: 0 5px 20px rgba(24, 25, 87, 0.5);
-  }
-
-  .bar-btn-1 {
-    color: #14165f;
-    border: 2px solid #202483;
-    font-size: 0.7rem;
-
-    .btn-icon {
-      background-size: 33%;
-      background-image: url(../../images/icon/add_dark.png);
-      transform: rotate(0deg);
-      transition: all 0.4s ease-in-out 0.1s;
+    .bar-btn:hover {
+      // background-color: #181957;
+      // border: 1px solid #181957;
+      // box-shadow: 0 5px 20px rgba(24, 25, 87, 0.5);
     }
-    span {
-      margin-right: 5px;
+
+    .bar-btn-1 {
+      color: #14165f;
+      border: 2px solid #202483;
+
+      .btn-icon {
+        background-size: 36%;
+        background-image: url(../../images/icon/add_dark.png);
+        transform: rotate(0deg);
+        transition: all 0.4s ease-in-out 0.1s;
+      }
+      span {
+        margin-right: 5px;
+      }
     }
-  }
 
-  .bar-btn-1:hover {
-    color: #fff;
-    background-color: #202483;
+    .bar-btn-1:hover {
+      color: #fff;
+      background-color: #202483;
 
-    .btn-icon {
-      background-image: url(../../images/icon/add_light.png);
-      transform: rotate(90deg);
+      .btn-icon {
+        background-image: url(../../images/icon/add_light.png);
+        transform: rotate(90deg);
+      }
     }
-  }
-  .bar-btn-2 {
-    color: #fff;
-    border: 2px solid #202483;
-    background-color: #202483;
-    font-size: 0.7rem;
+    .bar-btn-2 {
+      color: #fff;
+      border: 2px solid #202483;
+      background-color: #202483;
 
-    .btn-icon {
-      background-size: 55%;
-      background-image: url(../../images/icon/edit_white.png);
-      transform: rotate(0deg);
-      transition: all 0.4s ease-in-out 0.1s;
+      .btn-icon {
+        margin-top: -2px;
+        background-size: 55%;
+        background-image: url(../../images/icon/edit_white.png);
+        transform: rotate(0deg);
+        transition: all 0.4s ease-in-out 0.1s;
+      }
+      span {
+        margin-right: 5px;
+      }
     }
-    span {
-      margin-right: 5px;
-    }
-  }
 
-  .bar-btn-2:hover {
-    background-color: #0a0d6d;
-    box-shadow: 0 5px 30px rgba(20, 22, 95, 0.55);
+    .bar-btn-2:hover {
+      background-color: #0a0d6d;
+      box-shadow: 0 5px 30px rgba(20, 22, 95, 0.55);
 
-    .btn-icon {
-      transform: rotateY(180deg);
+      .btn-icon {
+        transform: rotateY(180deg);
+      }
     }
   }
 }

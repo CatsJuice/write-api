@@ -6,6 +6,7 @@ import bar_project from './components/bar/project.vue'
 import bar_api from './components/bar/api.vue'
 import bar_add_project from './components/bar/add_project.vue'
 import project_list from './components/project_list.vue'
+import create_project from './components/form/create_project.vue'
 
 const router = new VueRouter({
     routes: [
@@ -26,6 +27,7 @@ const router = new VueRouter({
                     path: 'add',
                     components: {
                         'bar-btns': bar_add_project,
+                        'content': create_project
                     }
                 },
                 {

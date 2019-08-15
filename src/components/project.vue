@@ -1,12 +1,12 @@
 <template>
   <div id="main">
     <!-- header -->
-    <div class="header-bg"></div>
+    <div :class="['header-bg', header_animi?'header-animi':'']" @mouseover="headerAnimi"></div>
     <div class="header">
       <div class="con">
         <div class="container">
           <div class="left">
-            <div class="dot"></div>
+            <div :class="['dot', dot_animi?'dot-animi':'']"></div>
             <span>
               <span style="position:relative; color:#1b1c4c; font-weight: 500; z-index: 2;">CAT</span>SJUICE@API DOC
             </span>
@@ -14,13 +14,17 @@
 
           <div class="mid"></div>
           <div class="right">
-            <div :class="['search', search.length>0?'search-active':'']">
-              <input type="text" v-model="search" />
+            <div :class="['search', search_active?'search-active':'']">
+              <input
+                type="text"
+                :placeholder="search_active?'Search Here ...' : ''"
+                @focus="search_active=true"
+                @blur="search_active=search.length>0?true:false"
+                v-model="search"
+              />
               <div class="search-icon"></div>
             </div>
-            <span>
-              {{ username }}
-            </span>
+            <span>{{ username }}</span>
             <p @click="logout">logout</p>
           </div>
         </div>
@@ -34,7 +38,7 @@
 
     <!-- content -->
     <div class="content-container">
-      <router-view name="content"></router-view>
+      <router-view name="content" ref='content'></router-view>
     </div>
 
     <!-- footer -->
@@ -49,7 +53,10 @@ export default {
   data() {
     return {
       search: "",
-      username: "请登录"
+      username: "请登录",
+      search_active: false,
+      header_animi: false,
+      dot_animi: false
     };
   },
   methods: {
@@ -61,7 +68,7 @@ export default {
         })
         .then(
           res => {
-            console.log(res.body);
+            // console.log(res.body);
             if (res.body.status != 200) this.$router.push({ path: "/login" });
             this.username = res.body.data.user_name;
           },
@@ -76,13 +83,35 @@ export default {
         })
         .then(
           res => {
-            console.log(res.body);
+            // console.log(res.body);
             if (res.body.status == 200 || res.body.status == 201)
               this.$router.push({ path: "/login" });
             else console.log("退出失败");
           },
           () => console.log("退出接口请求失败")
         );
+    },
+
+    headerAnimi() {
+      this.header_animi = true;
+      this.dot_animi = true;
+      setTimeout(() => (this.dot_animi = this.header_animi = false), 600);
+    },
+
+    // 供 tool-bar 调用的方法 
+    // 新建工程
+    emit_create_project() {
+      this.$refs.content.create_project();
+    },
+    // 供 tool-bar 调用的方法 
+    // 刷新项目列表
+    refreshProjects() {
+      this.$refs.content.refreshProjects();
+    },
+
+    showToast(params) {
+      this.$parent.global_toast(params)
+      // this.$parent.showToast(params);
     }
   },
   mounted() {
@@ -109,10 +138,32 @@ export default {
   height: 60px;
   background-color: #1b1c4c;
   background-image: url(../images/bg1.png);
-  background-size: auto 155px;
-  background-position: top;
-  z-index: 1;
+  background-size: 300px auto;
+  z-index: 888;
   position: relative;
+}
+// .header-bg:hover,
+.header-animi {
+  animation: top_bg_animi 0.6s ease 0s 1 normal forwards;
+}
+@keyframes top_bg_animi {
+  0% {
+  }
+  100% {
+    background-position: 300px 0;
+  }
+}
+.dot-animi {
+  animation: dot_animi 0.6s ease 0s 1 alternate;
+}
+@keyframes dot_animi {
+  0%{}
+  50%{
+    left: 50px;
+  }
+  100% {
+    left: -5px;
+  }
 }
 .header {
   // background: #1b1c4c;
@@ -122,6 +173,8 @@ export default {
   position: sticky;
   top: 0;
   color: #fff;
+  padding: 0;
+  z-index: 999;
 
   .con {
     width: 100vw;
@@ -133,13 +186,13 @@ export default {
       transition: all 0.3s ease;
       background-color: #fff;
       height: 100px;
-      box-shadow: 0px 2px 15px rgba(120, 120, 120, 0.1);
+      box-shadow: 0px 10px 15px rgba(120, 120, 120, 0.1);
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
       position: absolute;
       top: 0px;
       left: 50%;
-      transform: translateX(-50.5%);
+      
       z-index: -1;
       padding: 0 20px;
 
@@ -189,6 +242,10 @@ export default {
           z-index: 0;
           top: -8px;
           left: -5px;
+        }
+        span {
+          position: relative;
+          z-index: 2;
         }
       }
       .mid {
@@ -252,8 +309,8 @@ export default {
           background-color: rgba(255, 255, 255, 0.1);
         }
         p {
-          font-size: 0.8rem;
-          padding:  5px 10px;
+          font-size: 0.9rem;
+          padding: 5px 10px;
           cursor: pointer;
           transition: all 0.2s ease-in-out;
           border-radius: 2px;
@@ -261,7 +318,7 @@ export default {
         p:hover {
           color: #1b1c4c;
           background-color: #fff;
-          padding:  5px 30px;
+          padding: 5px 30px;
           font-weight: bold;
         }
       }
@@ -274,19 +331,27 @@ export default {
     @media screen and (min-width: 1600px) {
       .container {
         width: 1440px;
-        padding: 0 72px;
+        // padding: 0 72px;
       }
       .top-tool-bar {
         width: 1440px;
+        transform: translateX(-50.5%);
       }
     }
     @media screen and (max-width: 1600px) {
       .container {
-        width: 90%;
-        padding: 0 5%;
+        width: 90vw;
+        // padding: 0 5%;
       }
       .top-tool-bar {
-        width: 90%;
+        width: 90vw;
+        transform: translateX(-51%);
+      }
+    }
+    @media screen and (max-width: 550px){
+      .top-tool-bar {
+        width: 90vw;
+        transform: translateX(-52%);
       }
     }
 
@@ -314,7 +379,7 @@ export default {
         transform-origin: 50% 50%;
       }
     }
-    input[type="checkbox"]:hover + .top-tool-bar{
+    input[type="checkbox"]:hover + .top-tool-bar {
       .arrow {
         // background-image: url(../images/icon/down_arrow_white.png);
       }
@@ -326,21 +391,25 @@ export default {
       width: 100%;
       height: 40px;
       // background-color: #eeeeeea6;
-      background-color:rgba(255, 235, 205, 0.295);
+      background-color: rgba(255, 235, 205, 0.295);
       left: 0;
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
       transition: all 0.2s ease-in-out;
     }
     input[type="checkbox"]:hover + .top-tool-bar {
-      box-shadow: 0 10px 12px rgba(0,0,0,.07);
+      box-shadow: 0 10px 12px rgba(0, 0, 0, 0.07);
     }
   }
 }
 .content-container {
+  // padding: 0 20px;
+  flex-shrink: 0;
+  flex-grow: 0;
   padding-bottom: 100px;
-  // background-color: #e9bf02;
-  margin: 0 auto;
+  margin: 0;
+  margin-left: 50%;
+  transform: translateX(-50%);
   margin-top: 110px;
 }
 @media screen and (min-width: 1600px) {
@@ -350,7 +419,7 @@ export default {
 }
 @media screen and (max-width: 1600px) {
   .content-container {
-    width: 90%;
+    width: 90vw;
   }
 }
 </style>
