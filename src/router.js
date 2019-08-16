@@ -7,6 +7,12 @@ import bar_api from './components/bar/api.vue'
 import bar_add_project from './components/bar/add_project.vue'
 import project_list from './components/project_list.vue'
 import create_project from './components/form/create_project.vue'
+import api from './components/api.vue'
+import api_option from './components/api_option.vue'
+
+import api_prev from './components/form/api_prev.vue'
+import api_edit from './components/form/api_edit.vue'
+import create_api from './components/form/create_api.vue'
 
 const router = new VueRouter({
     routes: [
@@ -17,24 +23,39 @@ const router = new VueRouter({
             component: project,
             children: [
                 {
-                    path: '/', 
+                    path: '/',
                     components: {
-                        'bar-btns': bar_project,
+                        'bar_btns': bar_project,
                         'content': project_list
                     },
                 },
                 {
                     path: 'add',
                     components: {
-                        'bar-btns': bar_add_project,
+                        'bar_btns': bar_add_project,
                         'content': create_project
                     }
                 },
                 {
                     path: ':project_id',
                     components: {
-                        'bar-btns': bar_api
-                    }
+                        'bar_btns': bar_api,
+                        'content': api
+                    },
+                    children: [
+                        {
+                            path: 'add',
+                            component: create_api
+                        },
+                        {
+                            path: ':api_id',
+                            component: api_option,
+                            children: [
+                                { path: 'preview', component: api_prev },
+                                { path: 'edit', component: api_edit }
+                            ]
+                        }
+                    ]
                 },
             ]
         },

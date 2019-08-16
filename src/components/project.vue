@@ -30,7 +30,7 @@
         </div>
         <input type="checkbox" />
         <div class="top-tool-bar">
-          <router-view name="bar-btns"></router-view>
+          <router-view ref="bar_btns" name="bar_btns"></router-view>
           <div class="arrow"></div>
         </div>
       </div>
@@ -56,7 +56,7 @@ export default {
       username: "请登录",
       search_active: false,
       header_animi: false,
-      dot_animi: false
+      dot_animi: false,
     };
   },
   methods: {
@@ -107,6 +107,16 @@ export default {
     // 刷新项目列表
     refreshProjects() {
       this.$refs.content.refreshProjects();
+    },
+    // 供 tool-bar 调用的方法
+    // 启用编辑模式
+    switch_delete_mode() {
+      this.$refs.content.switch_delete_mode();
+    },
+    // 供 project_list 调用
+    // 删除指定id的工程
+    delete_project(id, name) {
+      this.$parent.delete_project(id, name)
     },
 
     showToast(params) {
@@ -411,6 +421,8 @@ export default {
   margin-left: 50%;
   transform: translateX(-50%);
   margin-top: 110px;
+  overflow: hidden;
+  // border-radius: 5px;
 }
 @media screen and (min-width: 1600px) {
   .content-container {

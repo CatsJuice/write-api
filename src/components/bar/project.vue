@@ -7,9 +7,9 @@
       </div>
     </div>
     <div class="right">
-      <div class="bar-btn bar-btn-2">
+      <div class="bar-btn bar-btn-2" @click="switch_del_mode">
         <div class="btn-icon"></div>
-        <span>编辑</span>
+        <span>{{ delete_mode ? '取消' : '删除项目'}}</span>
       </div>
       <router-link to="/project/add" tag="div" class="bar-btn bar-btn-1">
         <div class="btn-icon"></div>
@@ -21,9 +21,18 @@
 
 <script>
 export default {
+  data() {
+    return {
+      delete_mode: false
+    }
+  },
   methods: {
     refreshProjects() {
       this.$parent.refreshProjects();
+    },
+    switch_del_mode() {
+      this.delete_mode = !this.delete_mode
+      this.$parent.switch_delete_mode()
     }
   }
 };
@@ -160,24 +169,29 @@ export default {
     }
     .bar-btn-2 {
       color: #fff;
-      border: 2px solid #202483;
-      background-color: #202483;
+      border: 2px solid #cd5c5c;
+      background-color: #cd5c5c;
 
       .btn-icon {
         margin-top: -2px;
         background-size: 55%;
-        background-image: url(../../images/icon/edit_white.png);
+        background-image: url(../../images/icon/delete_white.png);
         transform: rotate(0deg);
         transition: all 0.4s ease-in-out 0.1s;
       }
       span {
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        transition: all 0.3s ease-in-out;
         margin-right: 5px;
       }
     }
 
     .bar-btn-2:hover {
-      background-color: #0a0d6d;
-      box-shadow: 0 5px 30px rgba(20, 22, 95, 0.55);
+      background-color: rgb(168, 58, 58);
+      border: 2px solid rgb(168, 58, 58);
+      box-shadow: 0 5px 30px rgba(205, 92, 92, 0.589);
 
       .btn-icon {
         transform: rotateY(180deg);

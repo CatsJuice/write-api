@@ -109,7 +109,7 @@ export default {
         })
         .then(
           res => {
-            console.log(res);
+            // console.log(res);
             if (res.body.status == 200) {
               // 插入成功
               this.$parent.showToast({
