@@ -414,8 +414,8 @@ export default {
 }
 .content-container {
   // padding: 0 20px;
-  flex-shrink: 0;
-  flex-grow: 0;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
   padding-bottom: 100px;
   margin: 0;
   margin-left: 50%;

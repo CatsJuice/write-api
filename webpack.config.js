@@ -17,7 +17,7 @@ module.exports = {
     },
     devServer: {    // 这是配置 dev-server 命令参数的第二种形式， 相对来说， 这种方式麻烦一些
         open: true, // 自动打开浏览器
-        port: 3000, // 端口号
+        port: 9999, // 端口号
         contentBase: 'src', // 托管的根目录
         hot: true,   // 启用热更新
     },

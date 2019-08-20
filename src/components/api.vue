@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="ep">
+  <transition-group name="ep" :class="[hide_left_bar?'hide-left-bar':'']">
     <div v-if="edit_project" key="edit_pro_mode" class="edit-project-con">
       <table>
         <tr>
@@ -73,12 +73,12 @@
 
     <div class="root-container" v-else key="edit_api_mode">
       <!-- 左侧侧边栏 -->
-      <input type="checkbox" />
+      <input ref="switchCkbox" type="checkbox" checked />
 
       <div class="left">
-        <api-list></api-list>
+        <api-list ref="api_list"></api-list>
       </div>
-      <div class="switch-left-btn">
+      <div ref="switchLeftBtn" class="switch-left-btn">
         <span></span>
         <span></span>
         <span></span>
@@ -86,7 +86,8 @@
 
       <!-- 右侧content -->
       <div class="content">
-        <router-view></router-view>
+        <!-- <router-view></router-view> -->
+        <api-op-content ref="api_op_content"></api-op-content>
       </div>
     </div>
   </transition-group>
@@ -94,6 +95,7 @@
 
 <script>
 import api_list from "./api_list.vue";
+import api_option from "./api_option.vue";
 import global from "./global.vue";
 
 export default {
@@ -118,11 +120,13 @@ export default {
       max_an: 40,
       max_ai: 255,
 
+      hide_left_bar: false,
       latest_prefix: "" // 保存最新的前缀
     };
   },
   components: {
-    "api-list": api_list
+    "api-list": api_list,
+    "api-op-content": api_option
   },
 
   methods: {
@@ -217,28 +221,47 @@ export default {
         au: this.au_txt,
         ai: this.ai_txt,
         project_id: this.$route.params.project_id
-      }
-      console.log(data)
+      };
+      console.log(data);
       // 3. 执行新建
-      this.$http.post(global.url_prefix + '/write-api/api/create', data, {
-        emulateJSON: true,
-        credentials: true
-      }).then(res => {
-        if (res.body.status == 200) {
-          this.$parent.showToast({
-            icon: 'yes_grey.png',
-            msg: '新建API成功',
-            time: 2000
-          });
-          this.$parent.$refs.bar_btns.cancelEdit();
-        } else {
-          this.$parent.showToast({
-            icon: '!.png',
-            msg: '新建失败，' + res.body.msg,
-            time: 2000
-          });
-        }
-      }, ()=>{});
+      this.$http
+        .post(global.url_prefix + "/write-api/api/create", data, {
+          emulateJSON: true,
+          credentials: true
+        })
+        .then(
+          res => {
+            if (res.body.status == 200) {
+              this.$parent.showToast({
+                icon: "yes_grey.png",
+                msg: "新建API成功",
+                time: 2000
+              });
+              this.$parent.$refs.bar_btns.cancelEdit();
+            } else {
+              this.$parent.showToast({
+                icon: "!.png",
+                msg: "新建失败，" + res.body.msg,
+                time: 2000
+              });
+            }
+          },
+          () => {}
+        );
+    },
+
+    hideLeftBar() {
+      // checkbox check=false
+      this.$refs.switchCkbox.checked = false;
+      this.hide_left_bar = true;
+    },
+    showLeftBar() {
+      // this.$refs.switchCkbox.checked = true
+      this.hide_left_bar = false;
+    },
+
+    father_test() {
+      console.log("\n\n\n\n\n\n\n\nTESTING\n\n\n\n\n\n\n\n");
     }
   },
   computed: {
@@ -263,6 +286,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+* {
+  transition: all 0.3s ease-in-out;
+}
 .ep-enter {
   opacity: 0;
   transform: translateX(-100%);
@@ -288,7 +314,6 @@ export default {
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  overflow-x: hidden;
 
   input[type="checkbox"] {
     position: fixed;
@@ -303,6 +328,9 @@ export default {
     left: 0px;
   }
   input[type="checkbox"]:checked ~ .switch-left-btn {
+    span {
+      border-color: #000;
+    }
     span:nth-child(1) {
       top: 35%;
       transform: translate(-100%, 0%) rotate(-45deg);
@@ -335,7 +363,7 @@ export default {
       width: 20px;
       height: 0;
       border-bottom: 2px solid;
-      border-color: #000;
+      border-color: #fff;
       position: absolute;
       left: 50%;
       // top: 50%;
@@ -354,40 +382,59 @@ export default {
   }
 
   .left {
-    height: 500px;
-    width: 180px;
+    // height: 500px;
+    // width: 210px;
+    width: 19.4vw;
     // background-color: rgb(0, 150, 105);
     // padding: 20px 5px;
     // padding-top: 60px;
     flex-shrink: 0;
-    left: -200px;
+    left: -250px;
     transition: all 0.5s ease-in-out;
     z-index: 8;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     //   移动设备
     .left {
       position: fixed;
+      width: 216px;
     }
     input[type="checkbox"],
     .switch-left-btn {
-      display: block;
+      left: 10px;
+    }
+    .content {
+      max-width: 90vw;
     }
   }
-  @media screen and (min-width: 600px) {
-    input[type="checkbox"],
-    .switch-left-btn {
+  @media screen and (min-width: 800px) {
+    input[type="checkbox"] {
       display: none;
     }
+    .switch-left-btn {
+      left: -200px;
+    }
     .left {
-      margin-right: 20px;
+      margin-right: 10px;
+    }
+    .content {
+      max-width: 70.6vw;
+    }
+  }
+  @media screen and (min-width: 1200px) {
+    .left {
+      width: 216px;
+    }
+    .content {
+      max-width: 90vw;
     }
   }
   .content {
     flex-shrink: 0;
     flex-grow: 1;
+
     // background-color: rgb(151, 52, 52);
-    height: 500px;
+    // height: 500px;
   }
 }
 
@@ -670,6 +717,17 @@ export default {
   }
   100% {
     right: 0;
+  }
+}
+
+.hide-left-bar {
+  .root-container {
+    input[type='checkbox'] {
+      display: none;
+    }
+    .switch-left-btn {
+      left: -200px;
+    }
   }
 }
 </style>

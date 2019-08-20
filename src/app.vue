@@ -42,6 +42,7 @@ export default {
       confirm_content: '',
       show_confirm: false,
       delete_project_id: -1,
+      module_id: -1,
 
       current_confirm_id: -1
     };
@@ -65,6 +66,7 @@ export default {
     },
     showConfirm(params, current_confirm_id){
       
+      this.module_id = params.module_id || -1
       this.confirm_title = params.title
       this.confirm_content = params.content
       this.show_confirm = true
@@ -84,6 +86,11 @@ export default {
       if (this.current_confirm_id == 1){
         this.$refs.app_root.$refs.content.do_delete(this.delete_project_id);
         this.current_confirm_id = -1;
+      } else if (this.current_confirm_id == 2) {
+        // console.log(this.$refs.app_root.$refs.content.$refs.api_list);
+        this.$refs.app_root.$refs.content.$refs.api_list.deleteModule(this.module_id, '', true);
+      } else if (this.current_confirm_id == 3) {
+        this.$refs.app_root.$refs.content.$refs.api_op_content.deleteAPI(true);
       }
     }
   }
@@ -166,6 +173,7 @@ export default {
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
     .title {
       display: flex;
@@ -175,7 +183,7 @@ export default {
       line-height: 30px;
 
       font-size: 2.4rem;
-      font-weight: 800;
+      font-weight: 700;
 
       .icon {
         width: 30px;
@@ -189,7 +197,7 @@ export default {
     }
     .content {
       padding-left: 50px;
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       margin-top: 10px;
     }
 

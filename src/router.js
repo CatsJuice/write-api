@@ -10,14 +10,14 @@ import create_project from './components/form/create_project.vue'
 import api from './components/api.vue'
 import api_option from './components/api_option.vue'
 
-import api_prev from './components/form/api_prev.vue'
-import api_edit from './components/form/api_edit.vue'
-import create_api from './components/form/create_api.vue'
+// import api_prev from './components/form/api_prev.vue'
+// import api_edit from './components/form/api_edit.vue'
+// import create_api from './components/form/create_api.vue'
 
 const router = new VueRouter({
     routes: [
-        // { path: '/', redirect: '/home' },
-        { path: '/', component: project },
+        { path: '/', redirect: '/project' },
+        // { path: '/', component: project },
         {
             path: '/project',
             component: project,
@@ -44,16 +44,8 @@ const router = new VueRouter({
                     },
                     children: [
                         {
-                            path: 'add',
-                            component: create_api
-                        },
-                        {
-                            path: ':api_id',
-                            component: api_option,
-                            children: [
-                                { path: 'preview', component: api_prev },
-                                { path: 'edit', component: api_edit }
-                            ]
+                            path: ':api_id'
+                            // component: api_option
                         }
                     ]
                 },

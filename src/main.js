@@ -17,7 +17,7 @@ import app from './app.vue';
 
 // 样式文件
 import 'bootstrap/dist/css/bootstrap.min.css'
-// import './css/public.css'
+import './css/public.css'
 
 const vm = new Vue({
     el: "#app",

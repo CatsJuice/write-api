@@ -11,10 +11,10 @@
 
       <div class="right">
         <!-- 新建API 按钮 -->
-        <div class="tool-bar-btn btn-add-api" @click="switchCreateMode()">
+        <!-- <div class="tool-bar-btn btn-add-api" @click="switchCreateMode()">
           <div class="icon"></div>
           <span>{{ create_new_api ? '确认新建' : '新建API'}}</span>
-        </div>
+        </div> -->
 
         <!-- 取消按钮 -->
         <div class="tool-bar-btn btn-edit-cancel" @click="cancelEdit()">
@@ -54,17 +54,18 @@ export default {
       }
     },
 
-    // 切换到新建 API
-    switchCreateMode() {
-      if (!this.create_new_api) {
-        this.$parent.$refs.content.edit_project = false;
-        this.edit_project = false;
-        this.$parent.$refs.content.create_new_api = true;
-        this.create_new_api = true;
-      } else {
-        this.$parent.$refs.content.creatAapi();
-      }
-    },
+    // // 切换到新建 API
+    // switchCreateMode() {
+    //   if (!this.create_new_api) {
+    //     this.$parent.$refs.content.edit_project = false;
+    //     this.edit_project = false;
+    //     this.$parent.$refs.content.create_new_api = true;
+    //     this.create_new_api = true;
+    //   } else {
+    //     this.$parent.$refs.content.creatAapi();
+    //   }
+    // },
+    
     cancelEdit() {
       if (this.edit_project) {
         this.$parent.$refs.content.edit_project = false;
